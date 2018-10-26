@@ -1,6 +1,7 @@
 package com.mitrais.rms.dao;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import org.mariadb.jdbc.MariaDbDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,15 +15,21 @@ public class DataSourceFactory
 {
     private final DataSource dataSource;
 
-    DataSourceFactory()
-    {
+    DataSourceFactory() throws SQLException {
         MysqlDataSource dataSource = new MysqlDataSource();
         // TODO: make these database setting configurable by moving to properties file
         dataSource.setDatabaseName("rmsdb");
-        dataSource.setServerName("192.168.99.100");
+        dataSource.setServerName("localhost");
         dataSource.setPort(3306);
-        dataSource.setUser("rms");
-        dataSource.setPassword("rms");
+        dataSource.setUser("root");
+        dataSource.setPassword("admin");
+
+        /*MariaDbDataSource dataSource = new MariaDbDataSource();
+        dataSource.setDatabaseName("rmsdb");
+        dataSource.setServerName("localhost");
+        dataSource.setPort(3306);
+        dataSource.setUser("root");
+        dataSource.setPassword("admin");*/
         this.dataSource = dataSource;
     }
 
@@ -38,6 +45,14 @@ public class DataSourceFactory
 
     private static class SingletonHelper
     {
-        private static final DataSourceFactory INSTANCE = new DataSourceFactory();
+        private static DataSourceFactory INSTANCE = null;
+
+        static {
+            try {
+                INSTANCE = new DataSourceFactory();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8" session="false"%>
 <%@ taglib prefix = "rms" uri = "/WEB-INF/tags/link.tld"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -27,20 +28,25 @@
     				<h2 class="mdl-card__title-text">Acme Co.</h2>
     			</div>
     	  	<div class="mdl-card__supporting-text">
-    				<form action="#">
+				<c:if test="${user != null}">
+				<form action="update" method="get">
+					</c:if>
+						<c:if test="${user == null}">
+						<form action="add" method="post">
+							</c:if>
+						<input type="hidden" name="id"  value="<c:out value="${param.id}"/>" />
     					<div class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="username" />
+							<input class="mdl-textfield__input" type="text" name="username" id="username" value="<c:out value="${user.userName}"/>" />
     						<label class="mdl-textfield__label" for="username">Username</label>
     					</div>
     					<div class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="password" id="userpass" />
+							<input class="mdl-textfield__input" type="password" name="userpass" id="userpass" value="<c:out value="${user.password}"/>" />
     						<label class="mdl-textfield__label" for="userpass">Password</label>
     					</div>
+                                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Save</button>
     				</form>
     			</div>
-    			<div class="mdl-card__actions mdl-card--border">
-    				<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Save</button>
-    			</div>
+
     		</div>
     	</main>
     </div>

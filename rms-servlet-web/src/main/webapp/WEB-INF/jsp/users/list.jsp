@@ -23,6 +23,9 @@
 <body>
     <div class="mdl-layout mdl-js-layout mdl-color--grey-100 box-center">
     	<main class="mdl-layout__content">
+            <div>
+                <a href="add">Add</a>
+            </div>
     		<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
               <thead>
                 <tr>
@@ -35,6 +38,11 @@
                   <tr>
                     <td class="mdl-data-table__cell--non-numeric"><c:out value = "${user.userName}"/></td>
                     <td><c:out value = "${user.password}"/></td>
+                      <td>
+                          <a href="edit?id=<c:out value='${user.id}' />">Edit</a>
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <a href="delete?id=<c:out value='${user.id}' />">Delete</a>
+                      </td>
                   </tr>
               </c:forEach>
               </tbody>

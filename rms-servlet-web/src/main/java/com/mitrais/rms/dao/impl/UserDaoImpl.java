@@ -89,6 +89,7 @@ public class UserDaoImpl implements UserDao
             PreparedStatement stmt = connection.prepareStatement("UPDATE user SET user_name=?, password=? WHERE id=?");
             stmt.setString(1, user.getUserName());
             stmt.setString(2, user.getPassword());
+            stmt.setString(3,user.getId().toString());
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
