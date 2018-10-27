@@ -25,79 +25,37 @@ public class UserServlet extends AbstractController
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        //String path = getTemplatePath(req.getServletPath()+req.getPathInfo());
-        String servletPath = req.getServletPath();
-        String pathInfo = req.getPathInfo();
-        UserDao userDao = UserDaoImpl.getInstance();
-        Long id;
-        Optional<User> user;
-
         switch (req.getPathInfo()){
             case "/list" :
-                userDao = UserDaoImpl.getInstance();
-                List<User> users = userDao.findAll();
-                req.setAttribute("users", users);
+                listUser(req,resp);
                 break;
             case "/add" :
-                if ("GET".equalsIgnoreCase(req.getMethod())){
-                    pathInfo="/form";
-                }
-                else {
-                    UserService userService = UserService.getInstance();
-                    id = userService.geUserbytLatestID().getId()+1;
-                    String userName = req.getParameter("username");
-                    String password = req.getParameter("userpass");
-                    userDao = UserDaoImpl.getInstance();
-                    userDao.save(new User(null,userName,password));
-                    pathInfo = "/list";
-                    req.setAttribute("users", userDao.findAll());
-                }
+                addUser(req,resp);
                 break;
             case "/edit" :
-                userDao = UserDaoImpl.getInstance();
-                id = Long.parseLong(req.getParameter("id"));
-                user = userDao.find(id);
-                user.ifPresent(u -> {
-                    req.setAttribute("user", u);
-                });
-                pathInfo = "/form";
+                editUser(req,resp);
                 break;
             case "/update" :
-                id = Long.parseLong(req.getParameter("id"));
-                String userName = req.getParameter("username");
-                String password = req.getParameter("userpass");
-                userDao = UserDaoImpl.getInstance();
-                userDao.update(new User(id,userName,password));
-                pathInfo = "/list";
-                req.setAttribute("users", userDao.findAll());
+                updateUser(req,resp);
                 break;
             case "/delete":
-                id = Long.parseLong(req.getParameter("id"));
-                userDao = UserDaoImpl.getInstance();
-                user = userDao.find(id);
-                UserDao finalUserDao = userDao;
-                user.ifPresent(u -> {
-                    finalUserDao.delete(u);});
-                pathInfo="/list";
-                req.setAttribute("users", userDao.findAll());
+                deleteUser(req,resp);
                 break;
                 default:
-                    userDao = UserDaoImpl.getInstance();
-                    users = userDao.findAll();
-                    req.setAttribute("users", users);
+                    listUser(req,resp);
         }
+    }
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher(getTemplatePath(servletPath+pathInfo));
-        requestDispatcher.forward(req, resp);
+    private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id = Long.parseLong(req.getParameter("id"));
+        UserDao userDao = UserDaoImpl.getInstance();
+        Optional<User> user = userDao.find(id);
+        UserDao finalUserDao = userDao;
+        user.ifPresent(u -> {
+            finalUserDao.delete(u);});
 
-        /*if ("/list".equalsIgnoreCase(req.getPathInfo())){
-            UserDao userDao = UserDaoImpl.getInstance();
-            List<User> users = userDao.findAll();
-            req.setAttribute("users", users);
-        }
+        resp.sendRedirect(req.getContextPath()+req.getServletPath()+"/list");
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher(getTemplatePath(servletPath+pathInfo));
-        requestDispatcher.forward(req, resp);*/
     }
 
     private void updateUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -106,10 +64,25 @@ public class UserServlet extends AbstractController
         String password = req.getParameter("userpass");
         UserDao userDao = UserDaoImpl.getInstance();
         userDao.update(new User(id,userName,password));
+
         listUser(req,resp);
     }
 
-    private void addUser(HttpServletRequest req, HttpServletResponse resp) {
+    private void addUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if ("GET".equalsIgnoreCase(req.getMethod())){
+            String path = getTemplatePath(req.getServletPath()+"/form");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);
+            requestDispatcher.forward(req, resp);
+        }else{
+            UserService userService = UserService.getInstance();
+            Long id = userService.geUserbytLatestID().getId()+1;
+            String userName = req.getParameter("username");
+            String password = req.getParameter("userpass");
+            UserDao userDao = UserDaoImpl.getInstance();
+            userDao.save(new User(null,userName,password));
+
+            listUser(req,resp);
+        }
     }
 
     private void editUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -16,6 +16,6 @@ class UserServiceTest {
         User user = new User();
         userDao.save(user);
 
-        assertEquals(user, user);
+//        assertEquals(user, user);
     }
 }

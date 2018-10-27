@@ -29,7 +29,7 @@
     			</div>
     	  	<div class="mdl-card__supporting-text">
 				<c:if test="${user != null}">
-				<form action="update" method="get">
+				<form action="update" method="post">
 					</c:if>
 						<c:if test="${user == null}">
 						<form action="add" method="post">
