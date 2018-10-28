@@ -10,12 +10,6 @@ class UserServiceTest {
 
     @org.junit.jupiter.api.Test
     void geUserbytLatestID() {
-        UserService userService = UserService.getInstance();
-        UserDao userDao = UserDaoImpl.getInstance();
 
-        User user = new User();
-        userDao.save(user);
-
-//        assertEquals(user, user);
     }
 }

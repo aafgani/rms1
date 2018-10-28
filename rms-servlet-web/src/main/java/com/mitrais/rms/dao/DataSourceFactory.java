@@ -1,7 +1,6 @@
 package com.mitrais.rms.dao;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import org.mariadb.jdbc.MariaDbDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,11 +17,19 @@ public class DataSourceFactory
     DataSourceFactory() throws SQLException {
         MysqlDataSource dataSource = new MysqlDataSource();
         // TODO: make these database setting configurable by moving to properties file
-        dataSource.setDatabaseName("rmsdb");
+        /*dataSource.setDatabaseName("rmsdb");
         dataSource.setServerName("192.168.99.100");
         dataSource.setPort(3306);
         dataSource.setUser("rms");
-        dataSource.setPassword("rms");
+        dataSource.setPassword("rms");*/
+        
+        dataSource.setDatabaseName("rmsdb");
+        dataSource.setServerName("localhost");
+        dataSource.setPort(3306);
+        dataSource.setUser("root");
+        dataSource.setPassword("admin");
+
+
         this.dataSource = dataSource;
     }
 

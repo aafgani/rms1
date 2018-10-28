@@ -1,9 +1,11 @@
 package com.mitrais.rms.controller;
 
+import com.mitrais.rms.dao.DataSourceFactory;
 import com.mitrais.rms.dao.UserDao;
 import com.mitrais.rms.dao.impl.UserDaoImpl;
 import com.mitrais.rms.model.User;
 import com.mitrais.rms.service.UserService;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,12 +13,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/users/*")
 public class UserServlet extends AbstractController
 {
+    ClassPathXmlApplicationContext context;
+
+    public UserServlet() {
+        /*context = new ClassPathXmlApplicationContext(
+                "applicationContext.xml");
+        DataSourceFactory dataSourceFactory = context.getBean(DataSourceFactory.class);
+
+        System.out.println(Arrays.asList(context.getBeanDefinitionNames()));*/
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
